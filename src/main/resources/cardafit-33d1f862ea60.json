@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cardafit",
+  "private_key_id": "33d1f862ea60308ac1bf0915c870337412e82790",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCiulXEQzBeiB+4\n8YFXWTSdnhE7kODlVvtp4+6hG5NUpjfumPWQ6L3SnamDduh8dvJnF/awDeyhSrFv\nHNAzXQ1CQTCQ6Mzf76peC8EvATpTGhQqVoJRyYaoy5NC+B88gd+jSKXSR/xEjX9i\n4VWXAXUpl57RvUnccHrtY0G2fisvDyQsf3mdnVS6dXBbxWh/BLZ+QzCxUMHANbzu\nPs1fIL27mMZvvQ3osmktDSaImAZAxvRh8qb8mPRVHP7GlK66Tmji6iP9M4EFK+Xv\nVia0UlBKhxmNNW5484leqgiPlOY9rJ3S+gCJcYUjzMn0DBbfvlJn+uMpousScHtB\nT09+wUUDAgMBAAECggEABMI3NNyUIwePCe0CD8hbigpvzZKgiQRgqMmSFmMEjXKo\n6xDNCZZMysZyiRYmmVEvKIWiYKafl13kT3ADxKTBeQEIBwzPxPKwxDxKw3GhP4Hh\nOhW6jOK8Td5aKZiw7SeNHyzGMJ6LSYPryDv3sUlJIFS/P7nt2YTui1eeOdR5tdAL\nFvjpIqH8cK+jBTFeLerbtN+s/XN6OGiTS7WQjBWf2CbhAQXYWM7rmsX11HX8tTGY\n2B5M74n0KkKLGtTkquCzGHVJlG/uOSNqjF89EeRdWMmrrf0MlHXhXy7xjj+T2JtE\nTN3rt61PHRBITKYNBC48aWaYhKe2wlKHoOccMtmEtQKBgQDV1u2SwkBq4cF7Ot4l\n92BdL92sBpRWBqOusVMt6AvWT4Rs/avpHs+hlfljFpN82G0DxCZFW3BLHxbLMeW5\nL5ycvSj83hIR4xBV1F1tCzlLHvEgmkNZT1exexjXbUeADcZ8WF9I+fkI6soCh+j0\ntbgkNwiKyGocq52wMgAveRPtjQKBgQDCz6i6oxxi2Bdx2GLV5M6K5ifS7Q+u3MuZ\nll5l36Y+vpmjZLq8pR3VDjgVI12LDZyoDi8WYWQCNiFE1DMRFtWZgDOfgtglUqTr\n97xbNEslebnXma+NYWHktCwK1q4YnwUQ9t46lhRDiU3vK7TX/4NUYDtbFac4Dlth\nz21u+LDwzwKBgDqLwLm4k1hv/MAXavDsHKcGzuMlXgF7id7vT7221V7UoIYSobmO\npPwxinj1mmXI/3fTgULl+QWoOl5hh+q+vVswcwNgbYQWLcfB/941/3awvwXVFnFi\nRrkh4bhBhBzsKJasv1HElsk5NxugSEiPZB4OLzmIC31UAzVVSzW0KZ+VAoGAGd30\n64NI+57xzf4LcZdGDY9t7kXn9TIAHs6mjiRaMK6iO93eJbpO8cFHlRbzDsmp6W6o\ntfIMk3aYiEkc1sIPbqhlMmLvTFVi7KoiaoHREJLPKF+RvdYWZ4W861uCFmbXB1+g\nNmtDGYybuow1IREeYQ++EeQYJgtR+vTN9RQ0emUCgYB3514Th4+nvQ42YVEGYBDU\ntaujNMY5F/3GhdyhNVzYTFIRbRwODmqYER6JG1xUyIZSQq0GZMpp4DeMCjND0fkG\ntAdaKGLk2F/TVCgZOGrO+nm9Q1C5DrCPLiRif4Xs/EcFUvl+StC2QHoVSnD9QRou\nBrBUVpBH4UrGYfGF8mTw3g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-lcbde@cardafit.iam.gserviceaccount.com",
+  "client_id": "117240329357785793794",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-lcbde%40cardafit.iam.gserviceaccount.com"
+}
