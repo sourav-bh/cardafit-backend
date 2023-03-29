@@ -67,8 +67,8 @@ public class PushNotificationService {
 
     private Map<String, String> getSamplePayloadData() {
         Map<String, String> pushData = new HashMap<>();
-        pushData.put("messageId", defaults.get("payloadMessageId"));
-        pushData.put("text", defaults.get("payloadData") + " " + LocalDateTime.now());
+        pushData.put("messageId", " " + LocalDateTime.now());
+        pushData.put("text", defaults.get("payloadData"));
         return pushData;
     }
 

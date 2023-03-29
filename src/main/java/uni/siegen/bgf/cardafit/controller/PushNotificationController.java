@@ -1,5 +1,7 @@
 package uni.siegen.bgf.cardafit.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import uni.siegen.bgf.cardafit.service.PushNotificationService;
 
 @RestController
 public class PushNotificationController {
+	@Autowired
+	private Environment env;
 
     private PushNotificationService pushNotificationService;
 
@@ -42,5 +46,11 @@ public class PushNotificationController {
     public ResponseEntity sendSampleNotification() {
         pushNotificationService.sendDailyTeamExercisePush();
         return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
+    }
+    
+    @GetMapping("/properties")
+    public ResponseEntity printProperties() {
+        String cronTime = env.getProperty("com.scheduled.cron");
+        return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Cron job is scheduled at: " + cronTime), HttpStatus.OK);
     }
 }
