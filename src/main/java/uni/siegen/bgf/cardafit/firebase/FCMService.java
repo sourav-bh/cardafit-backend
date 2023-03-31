@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -46,7 +47,7 @@ public class FCMService {
                 .setTtl(Duration.ofMinutes(2).toMillis()).setCollapseKey(topic)
                 .setPriority(AndroidConfig.Priority.HIGH)
                 .setNotification(AndroidNotification.builder().setSound(NotificationParameter.SOUND.getValue())
-                        .setColor(NotificationParameter.COLOR.getValue()).setTag(topic).build()).build();
+                        .setColor(NotificationParameter.COLOR.getValue()).setTag(" " + LocalDateTime.now()).build()).build();
     }
 
     private ApnsConfig getApnsConfig(String topic) {
