@@ -46,9 +46,9 @@ public class PushNotificationController {
         return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
     }
 
-    @GetMapping("/notification")
+    @GetMapping("/team/notification")
     public ResponseEntity<PushNotificationResponse> sendSampleNotification() {
-        pushNotificationService.sendDailyTeamExercisePush();
+        pushNotificationService.sendDailyTeamExerciseAlert();
         return new ResponseEntity<>(new PushNotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
     }
     
