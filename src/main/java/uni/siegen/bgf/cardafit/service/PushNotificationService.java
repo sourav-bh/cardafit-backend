@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
+
 import uni.siegen.bgf.cardafit.firebase.FCMService;
 import uni.siegen.bgf.cardafit.model.PushNotificationRequest;
 import uni.siegen.bgf.cardafit.model.User;
@@ -72,6 +74,7 @@ public class PushNotificationService {
     	for (int i=0; i<allUsers.size(); i++) {
     		String token = allUsers.get(i).getDeviceToken();
     		if (token != null && !token.isEmpty()) {
+    			System.out.println("+++++++++++++Device token for sendTaskAlert: " + token);
     			try {
     			    Thread.sleep(i * 10 * 1000);
     			} catch (InterruptedException ie) {
@@ -90,7 +93,11 @@ public class PushNotificationService {
             fcmService.sendMessageToTokenWithData(getAlertPayloadData(taskType), getTaskAlertNotificationRequest(taskType, token));
         } catch (InterruptedException | ExecutionException e) {
             logger.error(e.getMessage());
-        }
+        } catch (FirebaseMessagingException e) {
+            logger.error("Firebase Notification Failed:" + e.getMessage());
+//            user.setDeviceToken("");
+//            userRepository.save(user);
+       }
     }
 
     public void sendPushNotification(PushNotificationRequest request) {

@@ -9,7 +9,7 @@ public class User {
 	private String avatarName;
 	private String avatarImage;
 	private String deviceToken;
-	private int score;
+	private int score = 0;
 
 	public String getId() {
 		return id;
@@ -48,7 +48,7 @@ public class User {
 	}
 
 	public void setScore(int score) {
-		this.score = score;
+		this.score += score;
 	}
 
 	public String getAvatarImage() {
