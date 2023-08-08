@@ -44,6 +44,13 @@ public class FCMService {
     	String response = sendAndGetResponse(message);
     	logger.info("Sent message with data. Topic: " + request.getTopic() + ", " + response);
     }
+    
+    public void sendMessageToTokenWithOnlyData(Map<String, String> data, PushNotificationRequest request)
+            throws InterruptedException, ExecutionException, FirebaseMessagingException {
+        Message message = getPreconfiguredMessageToTokenWithOnlyData(data, request);
+    	String response = sendAndGetResponse(message);
+    	logger.info("Sent message with only data. Topic: " + request.getTopic() + ", " + response);
+    }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {
         return FirebaseMessaging.getInstance().sendAsync(message).get();
@@ -55,6 +62,12 @@ public class FCMService {
                 .setPriority(AndroidConfig.Priority.HIGH)
                 .setNotification(AndroidNotification.builder().setSound(NotificationParameter.SOUND.getValue())
                         .setColor(NotificationParameter.COLOR.getValue()).setTag(" " + LocalDateTime.now()).build()).build();
+    }
+    
+    private AndroidConfig getAndroidConfigOnlyData(String topic) {
+        return AndroidConfig.builder()
+                .setTtl(Duration.ofMinutes(2).toMillis()).setCollapseKey(topic)
+                .setPriority(AndroidConfig.Priority.HIGH).build();
     }
 
     private ApnsConfig getApnsConfig(String topic) {
@@ -81,6 +94,13 @@ public class FCMService {
         return getPreconfiguredMessageBuilder(request).putAllData(data).setToken(request.getToken())
                 .build();
     }
+    
+    private Message getPreconfiguredMessageToTokenWithOnlyData(Map<String, String> data, PushNotificationRequest request) {
+    	data.put("title", request.getTitle());
+    	data.put("message", request.getMessage());
+        return getPreconfiguredMessageBuilderOnlyData(request).putAllData(data).setToken(request.getToken())
+                .build();
+    }
 
     private Message.Builder getPreconfiguredMessageBuilder(PushNotificationRequest request) {
         AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
@@ -90,5 +110,10 @@ public class FCMService {
                         new Notification(request.getTitle(), request.getMessage()));
     }
 
+    private Message.Builder getPreconfiguredMessageBuilderOnlyData(PushNotificationRequest request) {
+        AndroidConfig androidConfig = getAndroidConfigOnlyData(request.getTopic());
+        ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
+        return Message.builder().setApnsConfig(apnsConfig).setAndroidConfig(androidConfig);
+    }
 
 }

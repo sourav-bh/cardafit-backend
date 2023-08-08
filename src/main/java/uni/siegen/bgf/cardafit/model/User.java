@@ -2,61 +2,50 @@ package uni.siegen.bgf.cardafit.model;
 
 import org.springframework.data.annotation.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import uni.siegen.bgf.cardafit.util.CryptUtil;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class User {
-	@Id private String id;
+	@Id 
+	private String id;
 
 	private String userName;
-	private String avatarName;
 	private String avatarImage;
 	private String deviceToken;
-	private int score = 0;
-
-	public String getId() {
-		return id;
-	}
+	private String password;
 	
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getAvatarName() {
-		return avatarName;
-	}
-
-	public void setAvatarName(String avatar) {
-		this.avatarName = avatar;
-	}
-
-	public String getDeviceToken() {
-		return deviceToken;
-	}
-
-	public void setDeviceToken(String deviceToken) {
-		this.deviceToken = deviceToken;
-	}
-
-	public int getScore() {
-		return score;
-	}
+	private int age;
+	private String gender;
+	private int weight;
+	private int height;
+	
+	private String jobPosition;
+	private String jobType;
+	private String workingDays; // comma separated days as 2-letter initial
+	private String workStartTime;
+	private String workEndTime;
+	
+	private String medicalConditions; // comma separated conditions string
+	private String diseases; // comma separated disease string
+	
+	private String preferredAlerts; // comma separated string containing alert type enum values
+	private boolean isMergedAlertSet; // indicate if the user wants to merge the alert types, like water + break and exercise + steps
+	
+	private int score = 0;
 
 	public void setScore(int score) {
 		this.score += score;
 	}
-
-	public String getAvatarImage() {
-		return avatarImage;
-	}
-
-	public void setAvatarImage(String avatarImage) {
-		this.avatarImage = avatarImage;
+	
+	public void setPassword(String password) {
+		this.password = CryptUtil.getInstance().getBCrypt(password);
 	}
 
 }

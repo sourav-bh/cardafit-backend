@@ -1,10 +1,17 @@
 package uni.siegen.bgf.cardafit.service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -14,13 +21,6 @@ import uni.siegen.bgf.cardafit.model.PushNotificationRequest;
 import uni.siegen.bgf.cardafit.model.User;
 import uni.siegen.bgf.cardafit.repository.AppInMemoryRepository;
 import uni.siegen.bgf.cardafit.repository.UserRepository;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class PushNotificationService {
@@ -33,6 +33,9 @@ public class PushNotificationService {
 
     private Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
     private FCMService fcmService;
+    
+    @Autowired
+    private ThreadPoolTaskScheduler taskScheduler;
 
     public PushNotificationService(FCMService fcmService) {
         this.fcmService = fcmService;
@@ -47,6 +50,17 @@ public class PushNotificationService {
         } catch (InterruptedException | ExecutionException e) {
             logger.error(e.getMessage());
         }
+    }
+    
+    public void sendTestExerciseAlert(String userName, int alertType) {
+    	System.out.printf("+++++++++++++Code for test alert is being executed...for user: %s and type: %d\n", userName, alertType);
+//    	taskScheduler.schedule(new SendAlertTask("scheduled task"), new Date(System.currentTimeMillis() + 1000));
+//    	taskScheduler.scheduleAtFixedRate(new SendAlertTask("scheduled task"), 1000);
+  	
+    	User user = userRepository.findByUserName(userName);
+    	if (user != null) {
+    	 sendTaskAlertPushNotification(alertType, user.getDeviceToken());
+    	}
     }
     
     @Scheduled(cron = "${daily.task.scheduled.cron}")
@@ -66,7 +80,6 @@ public class PushNotificationService {
     	AppInMemoryRepository.getInstance().updateScheduleCount();
     }
     
-//    @Scheduled(initialDelay = 10 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     public void sendTaskAlert(int taskType) {
     	System.out.println("+++++++++++++Code for sendTaskAlert is being executed...");
     	

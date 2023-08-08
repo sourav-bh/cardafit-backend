@@ -1,14 +1,14 @@
 package uni.siegen.bgf.cardafit.model;
 
-public class PushNotificationResponse {
+public class CommonResponse {
 
     private int status;
     private String message;
 
-    public PushNotificationResponse() {
+    public CommonResponse() {
     }
 
-    public PushNotificationResponse(int status, String message) {
+    public CommonResponse(int status, String message) {
         this.status = status;
         this.message = message;
     }
