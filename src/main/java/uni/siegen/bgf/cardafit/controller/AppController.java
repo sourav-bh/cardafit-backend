@@ -1,5 +1,8 @@
 package uni.siegen.bgf.cardafit.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uni.siegen.bgf.cardafit.model.CommonResponse;
 import uni.siegen.bgf.cardafit.model.LoginResponse;
 import uni.siegen.bgf.cardafit.model.User;
+import uni.siegen.bgf.cardafit.model.UserListResponse;
 import uni.siegen.bgf.cardafit.model.UserLoginRequest;
 import uni.siegen.bgf.cardafit.repository.UserRepository;
 import uni.siegen.bgf.cardafit.service.AppService;
@@ -53,5 +57,14 @@ public class AppController {
 			return new ResponseEntity<>(new CommonResponse(HttpStatus.CONFLICT.value(), "UserName already taken"), HttpStatus.CONFLICT);
 		}
         return new ResponseEntity<>(new CommonResponse(HttpStatus.OK.value(), "UserName is available"), HttpStatus.OK);
+    }
+    
+    @GetMapping("/users")
+    public ResponseEntity<CommonResponse> getUsersByTeam(@RequestParam String teamName) {
+    	List<User> users = repository.findByTeamName(teamName);
+		if (users != null && !users.isEmpty()) {
+			return new ResponseEntity<>(new UserListResponse(HttpStatus.OK.value(), "Success", users), HttpStatus.OK);
+		}
+        return new ResponseEntity<>(new UserListResponse(HttpStatus.NOT_FOUND.value(), "No user found in this team", new ArrayList<>()), HttpStatus.NOT_FOUND);
     }
 }

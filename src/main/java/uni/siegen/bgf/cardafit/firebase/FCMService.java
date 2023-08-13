@@ -98,7 +98,7 @@ public class FCMService {
     private Message getPreconfiguredMessageToTokenWithOnlyData(Map<String, String> data, PushNotificationRequest request) {
     	data.put("title", request.getTitle());
     	data.put("message", request.getMessage());
-        return getPreconfiguredMessageBuilderOnlyData(request).putAllData(data).setToken(request.getToken())
+        return getPreconfiguredMessageBuilderOnlyData(request).putAllData(data).setToken(request.getToken()).setTopic(request.getTopic())
                 .build();
     }
 
