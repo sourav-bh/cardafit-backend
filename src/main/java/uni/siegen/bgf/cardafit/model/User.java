@@ -1,9 +1,7 @@
 package uni.siegen.bgf.cardafit.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 
@@ -67,37 +65,37 @@ public class User {
 		this.password = CryptUtil.getInstance().getBCrypt(password);
 	}
 	
-	public void setWorkStartTime(String startTime) {
-		if (CommonUtil.isNotNullOrEmpty(startTime)) {
-			this.workStartTime = startTime;
-		} else {
-			this.workStartTime = "09:00";
-		}
-	}
-	
-	public String getWorkStartTime() {
-		if (!CommonUtil.isNotNullOrEmpty(workStartTime)) {
-			this.workStartTime = "09:00";
-		}
-		
-		return workStartTime;
-	}
-	
-	public void setWorkEndTime(String endTime) {
-		if (CommonUtil.isNotNullOrEmpty(endTime)) {
-			this.workEndTime = endTime;
-		} else {
-			this.workEndTime = "17:00";
-		}
-	}
-	
-	public String getWorkEndTime() {
-		if (!CommonUtil.isNotNullOrEmpty(workEndTime)) {
-			this.workEndTime = "17:00";
-		}
-		
-		return workEndTime;
-	}
+//	public void setWorkStartTime(String startTime) {
+//		if (CommonUtil.isNotNullOrEmpty(startTime)) {
+//			this.workStartTime = startTime;
+//		} else {
+//			this.workStartTime = "09:00";
+//		}
+//	}
+//	
+//	public String getWorkStartTime() {
+//		if (!CommonUtil.isNotNullOrEmpty(workStartTime)) {
+//			this.workStartTime = "09:00";
+//		}
+//		
+//		return workStartTime;
+//	}
+//	
+//	public void setWorkEndTime(String endTime) {
+//		if (CommonUtil.isNotNullOrEmpty(endTime)) {
+//			this.workEndTime = endTime;
+//		} else {
+//			this.workEndTime = "17:00";
+//		}
+//	}
+//	
+//	public String getWorkEndTime() {
+//		if (!CommonUtil.isNotNullOrEmpty(workEndTime)) {
+//			this.workEndTime = "17:00";
+//		}
+//		
+//		return workEndTime;
+//	}
 	
 	public void setPreferredAlerts(String preferredAlerts) {
 		this.preferredAlerts = preferredAlerts;

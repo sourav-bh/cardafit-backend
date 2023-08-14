@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import uni.siegen.bgf.cardafit.model.CommonResponse;
 import uni.siegen.bgf.cardafit.model.LoginResponse;
+import uni.siegen.bgf.cardafit.model.Team;
 import uni.siegen.bgf.cardafit.model.User;
 import uni.siegen.bgf.cardafit.model.UserListResponse;
 import uni.siegen.bgf.cardafit.model.UserLoginRequest;
+import uni.siegen.bgf.cardafit.repository.TeamRepository;
 import uni.siegen.bgf.cardafit.repository.UserRepository;
 import uni.siegen.bgf.cardafit.service.AppService;
 import uni.siegen.bgf.cardafit.util.CryptUtil;
@@ -25,6 +27,9 @@ import uni.siegen.bgf.cardafit.util.CryptUtil;
 public class AppController {
 	@Autowired
 	UserRepository repository;
+	
+	@Autowired
+	TeamRepository teamRepository;
 
     private AppService appService;
 
@@ -66,5 +71,14 @@ public class AppController {
 			return new ResponseEntity<>(new UserListResponse(HttpStatus.OK.value(), "Success", users), HttpStatus.OK);
 		}
         return new ResponseEntity<>(new UserListResponse(HttpStatus.NOT_FOUND.value(), "No user found in this team", new ArrayList<>()), HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping("/team/check")
+    public ResponseEntity<CommonResponse> checkIfTeamIsActive(@RequestParam String teamName) {
+    	Team team = teamRepository.findByTeamName(teamName);
+		if (team != null && team.isActive()) {
+			return new ResponseEntity<>(new CommonResponse(HttpStatus.OK.value(), "Team is active"), HttpStatus.OK);
+		}
+        return new ResponseEntity<>(new CommonResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Team is inactive for use right now!"), HttpStatus.NOT_ACCEPTABLE);
     }
 }
