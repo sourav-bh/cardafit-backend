@@ -10,12 +10,14 @@ import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 
 import uni.siegen.bgf.cardafit.firebase.FCMService;
 import uni.siegen.bgf.cardafit.model.SentAlertInfo;
 import uni.siegen.bgf.cardafit.model.User;
+import uni.siegen.bgf.cardafit.repository.UserRepository;
 import uni.siegen.bgf.cardafit.util.CommonUtil;
 
 public class SendAlertTask implements Runnable {
@@ -25,9 +27,12 @@ public class SendAlertTask implements Runnable {
     private User userInfo;
     private FCMService fcmService;
     
-    public SendAlertTask(User userInfo, FCMService fcmService) {
+	UserRepository userRepository;
+    
+    public SendAlertTask(User userInfo, FCMService fcmService, UserRepository userRepository) {
         this.userInfo = userInfo;
         this.fcmService = fcmService;
+        this.userRepository = userRepository;
     }
     
     @Override
@@ -58,6 +63,7 @@ public class SendAlertTask implements Runnable {
         					sentAlert.getSentCount() < 4) {
         				userInfo.setLastAlertSentTime(System.currentTimeMillis());
         				userInfo.getSentAlerts().get(i).setLastSentAt((System.currentTimeMillis()));
+        				userRepository.save(userInfo);
         				
         				sendTaskAlertPushWithOnlyData(sentAlert.getAlertType(), userInfo.getDeviceToken());
         				break;
@@ -86,6 +92,7 @@ public class SendAlertTask implements Runnable {
         					CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
         				userInfo.setLastAlertSentTime(System.currentTimeMillis());
         				userInfo.getSentAlerts().get(i).setLastSentAt((System.currentTimeMillis()));
+        				userRepository.save(userInfo);
         				
         				sendTaskAlertPushWithOnlyData(sentAlert.getAlertType(), userInfo.getDeviceToken());
         				break;

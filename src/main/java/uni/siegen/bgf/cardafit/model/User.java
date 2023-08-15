@@ -176,5 +176,46 @@ public class User {
 		
 		return this.sentAlerts;
 	}
+	
+	public void resetSentAlerts() {
+		if (this.sentAlerts != null) {
+			this.sentAlerts = new ArrayList<>();
+			
+			if (CommonUtil.isNotNullOrEmpty(preferredAlerts)) {
+				String[] prefAlerts = preferredAlerts.split(",");
+				for (int i=0 ;i<prefAlerts.length ; i++) {
+					String alertSet = prefAlerts[i].trim();
+					switch (alertSet) {
+					case "water":
+						sentAlerts.add(new SentAlertInfo(0, 0, 0));
+						break;
+					case "steps":
+						sentAlerts.add(new SentAlertInfo(1, 0, 0));
+						break;
+					case "exercise":
+						sentAlerts.add(new SentAlertInfo(2, 0, 0));
+						break;
+					case "breaks":
+						sentAlerts.add(new SentAlertInfo(3, 0, 0));
+						break;
+					case "waterWithBreak":
+						sentAlerts.add(new SentAlertInfo(5, 0, 0));
+						break;
+					case "walkWithExercise":
+						sentAlerts.add(new SentAlertInfo(6, 0, 0));
+						break;
+
+					default:
+						break;
+					}
+				}
+			} else {
+				sentAlerts.add(new SentAlertInfo(0, 0, 0));
+				sentAlerts.add(new SentAlertInfo(1, 0, 0));
+				sentAlerts.add(new SentAlertInfo(2, 0, 0));
+				sentAlerts.add(new SentAlertInfo(3, 0, 0));
+			}
+		}
+	}
 
 }

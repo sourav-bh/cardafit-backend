@@ -64,7 +64,7 @@ public class PushNotificationService {
             String currentDay = CommonUtil.getCurrentWeekDayName();
             if (CommonUtil.isNotNullOrEmpty(workingDays) && workingDays.contains(currentDay) &&
             		CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
-            	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService), new Date(System.currentTimeMillis() + 10));
+            	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService, userRepository), new Date(System.currentTimeMillis() + 10));
             }
     	}
     }
@@ -72,14 +72,14 @@ public class PushNotificationService {
     @Scheduled(cron = "${daily.start.day.scheduled.cron}")
 	public void resetDailyCounter() {
 		// reset all users alert count and times
-	}
-    
-    public void sendTestAlert() {
     	List<User> allUsers = userRepository.findAll();
     	for (int i=0; i<allUsers.size(); i++) {
-    		taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService), new Date(System.currentTimeMillis() + 1000));	
+    		User userInfo = allUsers.get(i);
+    		userInfo.setLastAlertSentTime(0);
+    		userInfo.resetSentAlerts();
+    		userRepository.save(userInfo);
     	}
-    }
+	}
 
     public void sendTestExerciseAlert(String userName, int alertType) {
     	System.out.printf("+++++++++++++Code for test alert is being executed...for user: %s and type: %d\n", userName, alertType);

@@ -20,10 +20,8 @@ public class GeneralController {
 	@Autowired
 	UserRepository repository;
 	
-	private PushNotificationService pushNotificationService;
-	
-	public GeneralController(PushNotificationService pushNotificationService) {
-        this.pushNotificationService = pushNotificationService;
+	public GeneralController() {
+        
     }
 	
 	@GetMapping("/properties")
@@ -46,7 +44,6 @@ public class GeneralController {
     
     @GetMapping("/test")
     public ResponseEntity<CommonResponse> testMethod() {
-    	pushNotificationService.sendTestAlert();
         return new ResponseEntity<>(new CommonResponse(HttpStatus.OK.value(), "Test is successful"), HttpStatus.OK);
     }
 
