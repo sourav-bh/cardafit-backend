@@ -79,7 +79,11 @@ public class FCMService {
 
     private ApnsConfig getApnsConfig(String topic) {
         return ApnsConfig.builder()
-                .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build();
+                .setAps(Aps.builder().setCategory(topic).setThreadId(topic).setContentAvailable(true).setMutableContent(true).build())
+                .putHeader("apns-push-type", "background")
+                .putHeader("apns-priority", "5")
+                .putHeader("apns-topic", "de.uni-siegen.bgf.cardafit")
+                .build();
     }
 
     private Message getPreconfiguredMessageToToken(PushNotificationRequest request) {
