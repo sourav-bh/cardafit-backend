@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-
 public class Feedback {
     @Id 
+    private String id;
 	private String userId;
 	private String feedbackText;
 

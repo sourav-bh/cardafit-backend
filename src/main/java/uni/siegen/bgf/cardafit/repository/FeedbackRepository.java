@@ -8,5 +8,5 @@ import uni.siegen.bgf.cardafit.model.Feedback;
 
 @RepositoryRestResource(collectionResourceRel = "feedback", path = "feedback")
 public interface FeedbackRepository extends MongoRepository<Feedback, String> {
-	Feedback saveFeedback(Feedback feedback);
+	
 }

@@ -1,5 +1,6 @@
 package uni.siegen.bgf.cardafit.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.google.firebase.messaging.FirebaseMessagingException;
 
 import uni.siegen.bgf.cardafit.firebase.FCMService;
+import uni.siegen.bgf.cardafit.model.SentAlertInfo;
 import uni.siegen.bgf.cardafit.model.User;
 import uni.siegen.bgf.cardafit.repository.UserRepository;
 import uni.siegen.bgf.cardafit.util.CommonUtil;
@@ -82,14 +84,18 @@ public class PushNotificationService {
 	}
 
     public void sendTestExerciseAlert(String userName, int alertType) {
-    	System.out.printf("+++++++++++++Code for test alert is being executed...for user: %s and type: %d\n", userName, alertType);
 //    	taskScheduler.schedule(new SendAlertTask("scheduled task"), new Date(System.currentTimeMillis() + 10));
 //    	taskScheduler.scheduleAtFixedRate(new SendAlertTask("scheduled task"), 1000);
   	
     	User user = userRepository.findByUserName(userName);
     	if (user != null) {
+    		ArrayList<SentAlertInfo> alertPrefs = (ArrayList<SentAlertInfo>) user.getSentAlerts();
+    		System.out.printf("Alert pref size: %d\n", alertPrefs.size());
+    		SentAlertInfo alertPref = alertPrefs.get(1);
+    		System.out.printf("+++++++++++++Code for test alert is being executed...for user: %s and type: %d\n", userName, alertPref.getAlertType());
+    		
     		try {
-                fcmService.sendMessageToTokenWithOnlyData(CommonUtil.getAlertPayloadData(alertType), user.getDeviceToken(), "team");
+                fcmService.sendMessageToTokenWithOnlyData(CommonUtil.getAlertPayloadData(alertPref.getAlertType()), user.getDeviceToken(), "team");
             } catch (InterruptedException | ExecutionException e) {
                 logger.error(e.getMessage());
             } catch (FirebaseMessagingException e) {
