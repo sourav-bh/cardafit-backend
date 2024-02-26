@@ -23,6 +23,8 @@ import uni.siegen.bgf.cardafit.util.CommonUtil;
 public class SendAlertTask implements Runnable {
     private Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
     private static final DateFormat TWENTY_FOUR_TF = new SimpleDateFormat("HH:mm");
+    private final double timeDurationBetweenAnyTwoAlert = 15*60*1000; // 15 minutes
+    private final double timeDurationBetweenSameTwoAlert = 60*60*1000; // 60 minutes
     
     private User userInfo;
     private FCMService fcmService;
@@ -43,7 +45,7 @@ public class SendAlertTask implements Runnable {
         String jobType = userInfo.getJobType();
         ArrayList<SentAlertInfo> sentAlerts = (ArrayList<SentAlertInfo>) userInfo.getSentAlerts();
         
-        logger.debug(new Date().toString() + 
+        System.out.println(new Date().toString() + 
         			" >> SendAlertTask for user: " + userInfo.getUserName() + 
         			" >> Id: " + userInfo.getId() +
         			" >> jobType: " + jobType +
@@ -53,7 +55,7 @@ public class SendAlertTask implements Runnable {
         if (CommonUtil.isNotNullOrEmpty(jobType) && jobType.equalsIgnoreCase("Teilzeit") && 
         		(CommonUtil.isNullOrEmpty(startTime) || CommonUtil.isNullOrEmpty(endTime))) {
         	// don't sent two consecutive alerts in 15 minutes duration
-            if (System.currentTimeMillis() - userInfo.getLastAlertSentTime() > 15*60*1000) {
+            if (System.currentTimeMillis() - userInfo.getLastAlertSentTime() > timeDurationBetweenAnyTwoAlert) {
             	System.out.println("Alert can be sent for part-timer, user: " + userInfo.getUserName());
             	
             	for (int i=0 ; i<sentAlerts.size() ; i++) {
@@ -61,10 +63,11 @@ public class SendAlertTask implements Runnable {
         			
         			// don't sent two consecutive alerts of same type in 60 minutes duration
                 	// send only half number of alerts as the worker is a part-timer
-        			if (System.currentTimeMillis() - sentAlert.getLastSentAt() > 60*60*1000 && 
+        			if (System.currentTimeMillis() - sentAlert.getLastSentAt() > timeDurationBetweenSameTwoAlert && 
         					CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken()) && 
         					sentAlert.getSentCount() < 4) {
         				userInfo.setLastAlertSentTime(System.currentTimeMillis());
+        				userInfo.getSentAlerts().get(i).setSentCount(userInfo.getSentAlerts().get(i).getSentCount() + 1);
         				userInfo.getSentAlerts().get(i).setLastSentAt((System.currentTimeMillis()));
         				userRepository.save(userInfo);
         				
@@ -72,28 +75,31 @@ public class SendAlertTask implements Runnable {
         				break;
         			}
         		}
+            } else {
+            	System.out.println("Alert cannot be sent now, due to the constraint: timeDurationBetweenAnyTwoAlert");
             }
         } else {
         	// set default times if user hasn't set any start and/or end time
         	if (CommonUtil.isNullOrEmpty(startTime)) startTime = "09:00";
-        	if (CommonUtil.isNullOrEmpty(endTime)) endTime = "17:00";
+        	if (CommonUtil.isNullOrEmpty(endTime)) endTime = "18:00";
         	
         	LocalTime currentTime = LocalTime.parse(TWENTY_FOUR_TF.format(Calendar.getInstance().getTime())) ;
             boolean isCurrentTimeInTargetPeriod = (currentTime.isAfter(LocalTime.parse(startTime)) && 
-            		currentTime.isBefore( LocalTime.parse(endTime)));
+            		currentTime.isBefore(LocalTime.parse(endTime)));
             
             // don't sent two consecutive alerts in 15 minutes duration
             if (isCurrentTimeInTargetPeriod && 
-            		System.currentTimeMillis() - userInfo.getLastAlertSentTime() > 15*60*1000) {
+            		System.currentTimeMillis() - userInfo.getLastAlertSentTime() > timeDurationBetweenAnyTwoAlert) {
             	System.out.println("Alert can be sent, current time is into the set time period for user: " + userInfo.getUserName());
             	
             	for (int i=0 ; i<sentAlerts.size() ; i++) {
         			SentAlertInfo sentAlert = sentAlerts.get(i);
         			
         			// don't sent two consecutive alerts of same type in 60 minutes duration
-        			if (System.currentTimeMillis() - sentAlert.getLastSentAt() > 60*60*1000 && 
+        			if (System.currentTimeMillis() - sentAlert.getLastSentAt() > timeDurationBetweenSameTwoAlert && 
         					CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
         				userInfo.setLastAlertSentTime(System.currentTimeMillis());
+        				userInfo.getSentAlerts().get(i).setSentCount(userInfo.getSentAlerts().get(i).getSentCount() + 1);
         				userInfo.getSentAlerts().get(i).setLastSentAt((System.currentTimeMillis()));
         				userRepository.save(userInfo);
         				
@@ -101,6 +107,8 @@ public class SendAlertTask implements Runnable {
         				break;
         			}
         		}
+            } else {
+            	System.out.println("Alert cannot be sent now, due to the constraint: timeDurationBetweenAnyTwoAlert");
             }
         }
         

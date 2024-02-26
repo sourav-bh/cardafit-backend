@@ -60,7 +60,12 @@ public class FCMService {
     }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {
-        return FirebaseMessaging.getInstance().sendAsync(message).get();
+        try {
+			FirebaseMessaging.getInstance().send(message);
+		} catch (FirebaseMessagingException e) {
+			e.printStackTrace();
+		}
+        return "";
     }
 
     private AndroidConfig getAndroidConfig(String topic) {

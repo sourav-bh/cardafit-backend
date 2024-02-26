@@ -56,20 +56,20 @@ public class PushNotificationService {
     
     @Scheduled(cron = "${daily.task.scheduled.cron}")
     public void scheduleTaskAlertsBasedOnUserPref() {
-    	System.out.println("+++++++++++++Code for scheduleTaskAlerts based on user preference is being executed...");
-    	
     	List<User> allUsers = userRepository.findAll();
     	for (int i=0; i<allUsers.size(); i++) {
     		User userInfo = allUsers.get(i);
     		String workingDays = userInfo.getWorkingDays();
             String currentDay = CommonUtil.getCurrentWeekDayName();
             
-            logger.debug("scheduleTaskAlertsBasedOnUserPref >> user: " + userInfo.getId() + ">> workingDays: " + workingDays + ">> currentDay: " + currentDay);
+            System.out.println("scheduleTaskAlertsBasedOnUserPref >> user: " + userInfo.getId() + ">> workingDays: " + workingDays + ">> currentDay: " + currentDay);
             if (CommonUtil.isNullOrEmpty(workingDays) && CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
+            	System.out.println("+++++++++++++Code for scheduleTaskAlerts based on user preference is being executed...");
             	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService, userRepository), new Date(System.currentTimeMillis() + 10));
             } 
             else if (CommonUtil.isNotNullOrEmpty(workingDays) && workingDays.contains(currentDay) &&
             		CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
+            	System.out.println("+++++++++++++Code for scheduleTaskAlerts based on user preference is being executed...");
             	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService, userRepository), new Date(System.currentTimeMillis() + 10));
             }
     	}
