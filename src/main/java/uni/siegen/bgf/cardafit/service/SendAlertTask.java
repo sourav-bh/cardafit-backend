@@ -37,14 +37,17 @@ public class SendAlertTask implements Runnable {
     
     @Override
     public void run() {
-        System.out.println(new Date()+"Send alert Task for user: " + userInfo.getUserName()
-          +" on thread "+Thread.currentThread().getName());
-        
         String startTime = userInfo.getWorkStartTime();
         String endTime = userInfo.getWorkEndTime();
         
         String jobType = userInfo.getJobType();
         ArrayList<SentAlertInfo> sentAlerts = (ArrayList<SentAlertInfo>) userInfo.getSentAlerts();
+        
+        logger.debug(new Date().toString() + 
+        			" >> SendAlertTask for user: " + userInfo.getUserName() + 
+        			" >> Id: " + userInfo.getId() +
+        			" >> jobType: " + jobType +
+        			" >> prefAlerts: " + userInfo.getPreferredAlerts());
         
         // check if the user is a part timer, then only send 4 alerts of per type
         if (CommonUtil.isNotNullOrEmpty(jobType) && jobType.equalsIgnoreCase("Teilzeit") && 
