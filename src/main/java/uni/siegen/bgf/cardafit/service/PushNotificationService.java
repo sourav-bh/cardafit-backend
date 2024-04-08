@@ -62,15 +62,19 @@ public class PushNotificationService {
     		String workingDays = userInfo.getWorkingDays();
             String currentDay = CommonUtil.getCurrentWeekDayName();
             
-            System.out.println("scheduleTaskAlertsBasedOnUserPref >> user: " + userInfo.getId() + ">> workingDays: " + workingDays + ">> currentDay: " + currentDay);
-            if (CommonUtil.isNullOrEmpty(workingDays) && CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
-            	System.out.println("+++++++++++++Code for scheduleTaskAlerts based on user preference is being executed...");
-            	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService, userRepository), new Date(System.currentTimeMillis() + 10));
-            } 
-            else if (CommonUtil.isNotNullOrEmpty(workingDays) && workingDays.contains(currentDay) &&
-            		CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
-            	System.out.println("+++++++++++++Code for scheduleTaskAlerts based on user preference is being executed...");
-            	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), fcmService, userRepository), new Date(System.currentTimeMillis() + 10));
+            logger.info("scheduleTaskAlertsBasedOnUserPref "
+            		+ ">> user: " + userInfo.getUserName()
+        			+ ">> hasToken: " + userInfo.getDeviceToken());
+            
+            
+            if (CommonUtil.isNotNullOrEmpty(userInfo.getDeviceToken())) {
+            	if (CommonUtil.isNullOrEmpty(workingDays)) { // by default the working is defined as MON-FRI
+                	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), userRepository), new Date(System.currentTimeMillis() + 1));
+                } else if (CommonUtil.isNotNullOrEmpty(workingDays) && workingDays.contains(currentDay)) {
+                	taskScheduler.schedule(new SendAlertTask(allUsers.get(i), userRepository), new Date(System.currentTimeMillis() + 1));
+                }
+            } else {
+            	// no processing will be done if there is no device token found for the user
             }
     	}
     }
@@ -86,6 +90,14 @@ public class PushNotificationService {
     		userRepository.save(userInfo);
     	}
 	}
+    
+    @Scheduled(cron = "${test.task.scheduled.cron}")
+    public void scheduleTestAlertsBasedOnUserPref() {
+    	User userInfo = userRepository.findByUserName("sourav");
+        logger.info("scheduleTestAlertsBasedOnUserPref "
+        		+ ">> user: " + userInfo.getUserName());
+        taskScheduler.schedule(new SendAlertTask(userInfo, userRepository), new Date(System.currentTimeMillis() + 1));
+    }
 
     public void sendTestExerciseAlert(String userName, int alertType) {
 //    	taskScheduler.schedule(new SendAlertTask("scheduled task"), new Date(System.currentTimeMillis() + 10));

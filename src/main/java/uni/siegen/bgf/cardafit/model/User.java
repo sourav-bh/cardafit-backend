@@ -133,7 +133,7 @@ public class User {
 		}
 	}
 	
-	public List<SentAlertInfo> getSentAlerts() {
+	public ArrayList<SentAlertInfo> getSentAlerts() {
 		if (this.sentAlerts == null) {
 			this.sentAlerts = new ArrayList<>();
 			
@@ -174,7 +174,7 @@ public class User {
 		}
 		
 		
-		return this.sentAlerts;
+		return (ArrayList<SentAlertInfo>) this.sentAlerts;
 	}
 	
 	public void resetSentAlerts() {

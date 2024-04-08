@@ -86,7 +86,7 @@ public class FCMService {
         return ApnsConfig.builder()
                 .setAps(Aps.builder().setCategory(topic).setThreadId(topic).setContentAvailable(true).setMutableContent(true).build())
                 .putHeader("apns-push-type", "background")
-                .putHeader("apns-priority", "5")
+                .putHeader("apns-priority", "10")
                 .putHeader("apns-topic", "de.uni-siegen.bgf.cardafit")
                 .build();
     }
@@ -118,8 +118,11 @@ public class FCMService {
     }
     
     private Message getPreconfiguredMessageToTokenWithOnlyData(Map<String, String> data, String token, String topic) {
+    	Aps aps = Aps.builder().putCustomData("interruption-level", "time-sensitive").build();
+    	ApnsConfig apnsConfig = ApnsConfig.builder().setAps(aps).build();
         return getPlatformConfigForOnlyDataMessage(topic)
         		.putAllData(data)
+        		.setApnsConfig(apnsConfig)
         		.setToken(token)
                 .build();
     }
