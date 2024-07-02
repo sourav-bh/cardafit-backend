@@ -90,28 +90,14 @@ public class PushNotificationService {
     		userRepository.save(userInfo);
     	}
 	}
-    
-    @Scheduled(cron = "${test.task.scheduled.cron}")
-    public void scheduleTestAlertsBasedOnUserPref() {
-    	User userInfo = userRepository.findByUserName("sourav");
-        logger.info("scheduleTestAlertsBasedOnUserPref "
-        		+ ">> user: " + userInfo.getUserName());
-        taskScheduler.schedule(new SendAlertTask(userInfo, userRepository), new Date(System.currentTimeMillis() + 1));
-    }
 
     public void sendTestExerciseAlert(String userName, int alertType) {
-//    	taskScheduler.schedule(new SendAlertTask("scheduled task"), new Date(System.currentTimeMillis() + 10));
-//    	taskScheduler.scheduleAtFixedRate(new SendAlertTask("scheduled task"), 1000);
-  	
     	User user = userRepository.findByUserName(userName);
     	if (user != null) {
-    		ArrayList<SentAlertInfo> alertPrefs = (ArrayList<SentAlertInfo>) user.getSentAlerts();
-    		System.out.printf("Alert pref size: %d\n", alertPrefs.size());
-    		SentAlertInfo alertPref = alertPrefs.get(1);
-    		System.out.printf("+++++++++++++Code for test alert is being executed...for user: %s and type: %d\n", userName, alertPref.getAlertType());
+    		System.out.printf("+++++++++++++Code for test alert is being executed...for user: %s and type: %d\n", userName, alertType);
     		
     		try {
-                fcmService.sendMessageToTokenWithOnlyData(CommonUtil.getAlertPayloadData(alertPref.getAlertType()), user.getDeviceToken(), "team");
+                fcmService.sendMessageToTokenWithOnlyData(CommonUtil.getAlertPayloadData(alertType), user.getDeviceToken(), "team");
             } catch (InterruptedException | ExecutionException e) {
                 logger.error(e.getMessage());
             } catch (FirebaseMessagingException e) {

@@ -84,7 +84,9 @@ public class FCMService {
 
     private ApnsConfig getApnsConfig(String topic) {
         return ApnsConfig.builder()
-                .setAps(Aps.builder().setCategory(topic).setThreadId(topic).setContentAvailable(true).setMutableContent(true).build())
+                .setAps(Aps.builder().setCategory(topic).setThreadId(topic)
+                		.setContentAvailable(true).setMutableContent(true)
+                		.putCustomData("interruption-level", "time-sensitive").build())
                 .putHeader("apns-push-type", "background")
                 .putHeader("apns-priority", "10")
                 .putHeader("apns-topic", "de.uni-siegen.bgf.cardafit")
@@ -118,8 +120,7 @@ public class FCMService {
     }
     
     private Message getPreconfiguredMessageToTokenWithOnlyData(Map<String, String> data, String token, String topic) {
-    	Aps aps = Aps.builder().putCustomData("interruption-level", "time-sensitive").build();
-    	ApnsConfig apnsConfig = ApnsConfig.builder().setAps(aps).build();
+    	ApnsConfig apnsConfig = getApnsConfig(topic);
         return getPlatformConfigForOnlyDataMessage(topic)
         		.putAllData(data)
         		.setApnsConfig(apnsConfig)
@@ -130,9 +131,13 @@ public class FCMService {
     private Message.Builder getPlatformConfigForNotificationMessage(PushNotificationRequest request) {
         AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
         ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
+        Notification notification = Notification
+                .builder()
+                .setTitle(request.getTitle())
+                .setBody(request.getMessage())
+                .build();
         return Message.builder()
-                .setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(
-                        new Notification(request.getTitle(), request.getMessage()));
+                .setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(notification);
     }
 
     private Message.Builder getPlatformConfigForOnlyDataMessage(String topic) {

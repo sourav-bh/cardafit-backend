@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
-            <version>6.8.1</version> <!-- latest 9.1.1 -->
+            <version>9.3.0</version> <!-- latest 6.8.1 -->
         </dependency>
         
         <dependency>
