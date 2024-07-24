@@ -119,6 +119,7 @@ public class SendAlertTask implements Runnable {
     	String response = sendAndGetResponse(message);
     	logger.info("Sent message with only data. For User:" + userInfo.getUserName() + ";Token: " + token + ", " + response);
     	if (response.length() > 0 && response.equalsIgnoreCase("-1")) {
+    		logger.info("Invalid token detected: " + token); // Logging invalid token
     		userInfo.setDeviceToken("");
     		userRepository.save(userInfo);
     	}
@@ -128,11 +129,16 @@ public class SendAlertTask implements Runnable {
         try {
 			return FirebaseMessaging.getInstance().send(message);
 		} catch (FirebaseMessagingException e) {
+			// Enhanced logging for FirebaseMessagingException
+	        logger.error("FirebaseMessagingException: " + e.getMessage());
+	        logger.error("Error Code: " + e.getErrorCode());
 			e.printStackTrace();
 			if (e.getErrorCode().equals("messaging/registration-token-not-registered") 
 					|| e.getErrorCode().equals("INVALID_ARGUMENT") || e.getErrorCode().equals("UNREGISTERED")) {
 				return "-1";
+				
 			}
+			
 		}
         return "";
     }
@@ -151,6 +157,7 @@ public class SendAlertTask implements Runnable {
                 .putHeader("apns-push-type", "background")
                 .putHeader("apns-priority", "10")
                 .putHeader("apns-topic", "de.uni-siegen.bgf.cardafit")
+                .putHeader("apns-expiration", "0") // Added header to ensure notification does not expire
                 .build();
     }
     
